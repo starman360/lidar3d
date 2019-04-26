@@ -1,0 +1,3 @@
+<launch>
+    <node name="motor_pub" pkg="motor_spin" type="motor_pub.py"/>
+</launch>

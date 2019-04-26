@@ -1,0 +1,29 @@
+<launch>
+  <node name="dummy_rotate_lidar3d" pkg="frame_trans" type="dummy_rotate_lidar3d"/>
+
+  <node name="base_rotate_tf_broadcaster" pkg="frame_trans" type="base_rotate_tf_broadcaster"/>
+
+  <node name="scan2_to_cloud2" pkg="frame_trans" type="scan2_to_cloud2"/>
+  <node name="scan1_to_cloud1" pkg="frame_trans" type="scan1_to_cloud1"/>
+  
+  <!-- Launch the two lidar units -->
+  <include file="$(find frame_trans)/launch/lidar1.launch" />
+  <include file="$(find frame_trans)/launch/lidar2.launch" />
+
+
+  <node type="point_cloud_assembler" pkg="laser_assembler" name="cloud1_assembler">
+    <remap from="cloud" to="point_cloud1"/>
+    <param name="max_clouds" type="int" value="400" />
+    <param name="fixed_frame" type="string" value="world" />
+  </node>
+
+  <node type="point_cloud_assembler" pkg="laser_assembler" name="cloud2_assembler">
+    <remap from="cloud" to="point_cloud2"/>
+    <param name="max_clouds" type="int" value="400" />
+    <param name="fixed_frame" type="string" value="world" />
+  </node>
+
+  <node name="cloud1_total" pkg="frame_trans" type="cloud1_total"/>
+  <node name="cloud2_total" pkg="frame_trans" type="cloud2_total"/>
+
+</launch>
